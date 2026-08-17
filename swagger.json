@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Gerenciamento de Estoque",
+    "title": "Inventory Manager",
     "version": "1.0.0",
-    "description": "API RESTful para o gerenciamento de estoque. Permite o cadastro, consulta, atualização e remoção de produtos, usuários e registro de entradas e saídas para controle eficiente do estoque. Ideal para pequenas e médias empresas que precisam gerenciar inventário de forma informatizada.",
+    "description": "Projeto pessoal de estudo de Clean Architecture, DDD e SOLID. Esta documentação cobre o módulo de usuários, autenticação (JWT + refresh token) e controle de acesso (RBAC), que é a parte do projeto efetivamente implementada.",
     "contact": {
       "email": "railson.devv@gmail.com"
     }

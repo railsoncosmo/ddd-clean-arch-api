@@ -1,15 +1,23 @@
 # 📦 Inventory Manager API
 
-Uma API REST para **gerenciamento de estoque e vendas**, construída com **TypeScript**, **Node.js**, **Express**, **PostgreSQL (15+)** e **TypeORM**.  
-Desenvolvida seguindo os princípios do **SOLID**, utilizando **Clean Architecture** e **DDD (Domain-Driven Design)**.
+![CI](https://github.com/railsoncosmo/inventory-manager/actions/workflows/ci.yml/badge.svg)
+
+Projeto pessoal de estudo, construído com **TypeScript**, **Node.js**, **Express**, **PostgreSQL** e **TypeORM**.
+
+Simula uma API de gerenciamento de estoque e serve como prática de **SOLID**, **Clean Architecture** e **DDD (Domain-Driven Design)**, aplicados a um módulo de usuários com autenticação, autorização e persistência de dados.
+
+---
+
+## 🎯 Sobre o projeto
+
+Este repositório documenta como estruturei uma API em camadas seguindo Clean Architecture e DDD: separação entre domínio, aplicação e infraestrutura, casos de uso isolados das regras de negócio e controle de acesso baseado em papéis (RBAC).
 
 ---
 
 ## 📚 Documentação da API (Swagger)
 
-Documentação interativa disponível via **Swagger UI**!  
-Após clonar o repositório e subir o projeto localmente (via Docker Compose ou npm)
-Acesse: http://localhost:PORT/api-docs
+Documentação interativa disponível via **Swagger UI**.
+Após subir o projeto localmente, acesse: `http://localhost:PORT/api-docs`
 
 ---
 
@@ -22,21 +30,19 @@ Acesse: http://localhost:PORT/api-docs
 - **TypeORM** – ORM para integração com o banco
 - **JWT** – Autenticação segura via tokens
 - **Refresh Token** – Persistência de sessão de forma segura
+- **CASL** – Controle de acesso baseado em papéis (RBAC)
+- **Vitest** – Testes unitários e de integração
 - **Docker & Docker Compose** – Containerização e orquestração
 
 ---
 
-## ✅ Checklist de Funcionalidades
+## ✅ Funcionalidades
 
-- [x] Cadastro de usuário
-- [x] Controle de acesso baseado em cargo (RBAC)
-- [x] Autenticação com JWT e persistência com refresh token
-- [ ] Cadastro de categorias
-- [ ] Cadastro de produtos
-- [ ] Adicionar produtos ao estoque
-- [ ] Remover produtos do estoque
-- [ ] Lançamento de vendas
-- [ ] Geração de relatórios de vendas
+- Cadastro de usuário
+- Autenticação com JWT e persistência de sessão via refresh token
+- Controle de acesso baseado em papéis (RBAC) com CASL, incluindo o modelo de permissões para produtos, categorias, estoque e transações em [src/infrastructure/rbac](src/infrastructure/rbac)
+- Consulta de perfil do usuário autenticado
+- Cobertura de testes unitários para as camadas de domínio e aplicação
 
 ---
 
@@ -56,7 +62,10 @@ src/
 
 ## 🛠 Instalação e Configuração
 
+A API roda localmente (via npm); o Docker Compose deste projeto sobe apenas o banco de dados PostgreSQL.
+
 ### 1️⃣ Pré-requisitos
+- **Node.js** >= 18
 - **Docker** >= 24
 - **Docker Compose** >= 2.0
 
@@ -86,34 +95,45 @@ REFRESH_TOKEN_SECRET=
 EXPIRES_REFRESH_TOKEN_DAYS=
 ```
 
-> **Observação:** No Docker, o `DB_HOST` deve ser o nome do serviço do banco definido no `docker-compose.yml` (ex.: `db`).
+> **Observação:** Os valores de `DB_HOST` e `DB_PORT` devem corresponder ao serviço `inventory-pg` definido no `docker-compose.yml`.
+
+### 3️⃣ Instalar dependências
+
+```bash
+npm install
+```
 
 ---
 
-## ▶️ Rodando com Docker Compose
+## ▶️ Subindo o banco de dados
 
 ```bash
 docker-compose up -d
 ```
 
 Isso irá:
-- Criar e iniciar um container para a API
 - Criar e iniciar um container para o PostgreSQL
 - Criar um volume para persistência dos dados do banco
 
 ---
 
-## 🔄 Executando migrations dentro do container
-
-Após subir os containers, execute:
+## 🔄 Executando migrations
 
 ```bash
-docker-compose exec api npm run typeorm migration:run
+npm run migration:run
 ```
 
 ---
 
-## 📥 Parando e removendo containers
+## ▶️ Rodando a aplicação
+
+```bash
+npm run dev
+```
+
+---
+
+## 📥 Parando o banco de dados
 
 ```bash
 docker-compose down
@@ -130,29 +150,23 @@ docker-compose down -v
 
 ```mermaid
 flowchart LR
-    A[Usuário] -->|Login| B[API /login]
+    A[Usuário] -->|Login| B[API /session]
     B -->|JWT + Refresh Token| C[Cliente]
     C -->|Request com JWT| D[Endpoint Protegido]
     D -->|Validação JWT| E[Resposta]
-    C -->|JWT Expirado| F[API /refresh-token]
+    C -->|JWT Expirado| F[API /refresh/token]
     F -->|Novo JWT| C
 ```
 ---
 
-## 📌 Rotas Principais
+## 📌 Rotas Disponíveis
 
-| Método | Endpoint           | Descrição                    | Autenticação |
-|--------|-------------------|-------------------------------|--------------|
-| POST   | `/users`          | Criar usuário                 | ❌          
-| POST   | `/session`        | Autenticar usuário            | ❌           
-| GET    | `/users/profile`  | Obter perfil                  | ✅           
-| POST   | `/categories`     | Criar categoria               | ✅(Admin)
-| GET    | `/categories`     | Listar categorias             | ✅       
-| POST   | `/products`       | Criar produto                 | ✅(Admin)   
-| POST   | `/stock/add`      | Adicionar ao estoque          | ✅           
-| POST   | `/stock/remove`   | Remover do estoque            | ✅(Admin)         
-| POST   | `/sales`          | Registrar venda               | ✅
-| GET    | `/reports/sales`  | Relatório de vendas           | ✅(Admin)        
+| Método | Endpoint          | Descrição               | Autenticação |
+|--------|-------------------|--------------------------|--------------|
+| POST   | `/users`          | Criar usuário            | ❌           |
+| POST   | `/session`        | Autenticar usuário       | ❌           |
+| POST   | `/refresh/token`  | Atualizar token de acesso| ✅ (cookie)  |
+| GET    | `/me`             | Obter perfil do usuário  | ✅           |
 
 ---
 
@@ -160,7 +174,7 @@ flowchart LR
 
 Este projeto utiliza **Vitest** para testes unitários.
 
-⚠️ **Atenção:**  
+⚠️ **Atenção:**
 Para rodar os testes unitários é necessário criar um arquivo de variáveis de ambiente chamado `.env.test` na raiz do projeto, contendo as configurações de ambiente específicas para o ambiente de teste (como banco de dados, JWT_SECRET, REFRESH_TOKEN_SECRET, etc).
 
 Para rodar os testes:
@@ -180,6 +194,12 @@ npm run coverage
 
 ---
 
-## 📄 Licença
+## 🧹 Lint
 
-Este projeto está sob a licença MIT.  
+O projeto utiliza **ESLint**. Para verificar o código:
+```bash
+npm run lint
+```
+
+Lint e testes rodam automaticamente a cada push/PR via GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)).
+

@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Create test environment file
+        run: |
+          cat <<EOF > .env.test
+          NODE_ENV=test
+          JWT_SECRET=test-jwt-secret-key-for-testing
+          REFRESH_TOKEN_SECRET=test-refresh-token-secret-for-testing
+          EXPIRES_REFRESH_TOKEN_DAYS=30
+          PORT=3334
+          DB_HOST=localhost
+          DB_PORT=5433
+          DB_USER=test_user
+          DB_PASSWORD=test_password
+          DB_NAME=test_database
+          EOF
+
+      - name: Run tests
+        run: npm test
