@@ -1,6 +1,6 @@
-# 📦 Inventory Manager API
+# 🏛️ DDD Clean Architecture API
 
-![CI](https://github.com/railsoncosmo/inventory-manager/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/railsoncosmo/ddd-clean-arch-api/actions/workflows/ci.yml/badge.svg)
 
 Projeto pessoal de estudo, construído com **TypeScript**, **Node.js**, **Express**, **PostgreSQL** e **TypeORM**.
 

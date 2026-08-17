@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "ddd-clean-arch-api",
   "version": "1.0.0",
   "description": "Projeto pessoal de estudo de SOLID, Clean Architecture e DDD em uma API de gerenciamento de estoque.",
   "main": "index.js",
@@ -18,7 +18,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/railsoncosmo/inventory-manager"
+    "url": "https://github.com/railsoncosmo/ddd-clean-arch-api"
   },
   "type": "commonjs",
   "devDependencies": {
