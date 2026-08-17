@@ -1,3 +1,7 @@
 # Arquivos de configuração
 .env
+.env.test
 node_modules
+
+# Artefatos gerados
+coverage

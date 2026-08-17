@@ -1,7 +1,7 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Projeto pessoal de estudo de SOLID, Clean Architecture e DDD em uma API de gerenciamento de estoque.",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/server.ts",
@@ -10,11 +10,16 @@
     "coverage": "vitest run --coverage",
     "typeorm": "node -r ts-node/register -r tsconfig-paths/register -r dotenv/config ./node_modules/typeorm/cli.js",
     "migration:generate": "npm run typeorm -- -d ./src/config/data-source.ts migration:generate ./src/infrastructure/database/typeorm/migrations/migration",
-    "migration:run": "npm run typeorm -- -d ./src/config/data-source.ts migration:run"
+    "migration:run": "npm run typeorm -- -d ./src/config/data-source.ts migration:run",
+    "lint": "eslint ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
+  "keywords": ["typescript", "clean-architecture", "ddd", "solid", "express", "typeorm"],
+  "author": "Railson Cosmo",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/railsoncosmo/inventory-manager"
+  },
   "type": "commonjs",
   "devDependencies": {
     "@eslint/js": "^9.31.0",
